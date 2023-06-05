@@ -8,7 +8,7 @@ interval = int(input("Enter time interval"))
 #	interval=int(file.readline().strip())
 cron = CronTab(user=True)
 
-command = f'python3 /home/jeevesh/hello.py'
+command = f'python3 /home/jeevesh/cron/hello.py'
 job = cron.new(command=command)
 
 job.every(interval)
@@ -16,6 +16,6 @@ job.every(interval)
 cron.write()
 
 while True:
-	subprocess.run(['python3','hello.py'], check=True)
+	subprocess.run(['python3','/home/jeevesh/hi.py'], check=True)
 	
 	time.sleep(interval)

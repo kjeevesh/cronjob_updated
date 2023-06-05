@@ -1,9 +1,12 @@
+from flask import Flask, request
 from crontab import CronTab
 import random
 
+app = Flask(__name__)
+
 class CronJobManager:
     def __init__(self):
-        self.cron = CronTab(user=True)> /home/jeevesh/backup.log 2>&1
+        self.cron = CronTab(user=True)
 
     def add_cron_job(self, program_names, unique_id, schedule):
         # Iterate over the program names and create a cron job for each
@@ -31,16 +34,17 @@ class CronJobManager:
 
         # Write the updated crontab
         self.cron.write()
-    
-    def print_cron_job(self):
-        for job in self.cron:
-            print(job)
-
 
 manager = CronJobManager()
-program_names = ['hello','world','hi']
-unique_id = str(random.randint(1000,9999))
-schedule = '*/1 * * * *'
-manager.add_cron_job(program_names, unique_id, schedule)  # Add cron jobs for multiple programs with the same unique ID
-#manager.print_cron_job()
-#manager.delete_cron_job(unique_id)  # Delete the cron jobs with the unique ID
+
+@app.route('/create_cron_jobs', methods=['POST'])
+def create_cron_jobs():
+    program_names = request.json.get('program_names')
+    unique_id = str(random.randint(1000, 9999))
+    schedule = request.json.get('schedule')
+
+    manager.add_cron_job(program_names, unique_id, schedule)
+    return 'Cron jobs created successfully'
+
+if __name__ == '__main__':
+    app.run()
